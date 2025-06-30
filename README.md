@@ -50,6 +50,9 @@ Make sure you have the following installed:
 git clone https://github.com/YOUR_USERNAME/gymtrack-app.git
 cd gymtrack-app
 ```
+
+---
+
 ##🔙 2. Set Up the Backend
 
 
