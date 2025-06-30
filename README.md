@@ -49,54 +49,43 @@ Make sure you have the following installed:
 ```bash
 git clone https://github.com/YOUR_USERNAME/gymtrack-app.git
 cd gymtrack-app
-🔙 2. Set Up the Backend
-bash
-Copy
-Edit
+```
+##🔙 2. Set Up the Backend
+
+
 cd backend
 npm install
-Create a .env file:
-
-ini
-Copy
-Edit
+###Create a .env file:
 PORT=3000
 DATABASE_URL=postgres://youruser:yourpass@localhost:5432/gymtrack
 JWT_SECRET=your_secret_key
-Run the server:
+###Run the server:
 
-bash
-Copy
-Edit
 npm run start
-Test it:
-
-bash
-Copy
-Edit
+#Test it:
 curl http://localhost:3000/workouts
-🧪 3. Run Lint & Tests
-bash
-Copy
-Edit
+---
+
+##🧪 3. Run Lint & Tests
+
 npm run lint
 npm run test
-🐳 4. Run Backend in Docker (Optional)
-bash
-Copy
-Edit
+---
+
+##🐳 4. Run Backend in Docker (Optional)
+
 docker build -t gymtrack-backend .
 docker run -p 3000:3000 --env-file .env gymtrack-backend
-🖼️ 5. Frontend Setup (If applicable)
-bash
-Copy
-Edit
+---
+
+##🖼️ 5. Frontend Setup (If applicable)
 cd ../frontend
 npm install
 npm run dev
 Configure API URL in .env or config.js as needed.
+---
 
-✅ CI/CD
+##✅ CI/CD
 GitHub Actions is used to:
 
 Lint code using ESLint
@@ -106,8 +95,9 @@ Run unit tests with Jest
 Trigger pipeline on all pull requests to main or develop
 
 See .github/workflows/ci.yml for details.
+---
 
-📌 Project Status
+##📌 Project Status
 This is a work-in-progress application for a DevOps course project.
 Major tasks ahead:
 
@@ -118,9 +108,11 @@ Major tasks ahead:
  Deploy to cloud (Render or AWS)
 
  Add container orchestration and monitoring
+---
 
-📄 License
+##📄 License
 MIT License. Feel free to fork, extend, and improve the project.
+---
 
-👨‍💻 Author
+###👨‍💻 Author
 Created by Bosco Ishimwe as part of a DevOps learning project.
