@@ -53,69 +53,68 @@ cd gymtrack-app
 
 ---
 
-##🔙 2. Set Up the Backend
+## 🔙 2. Set Up the Backend
 
 
 cd backend
 npm install
-###Create a .env file:
+### Create a .env file:
 PORT=3000
 DATABASE_URL=postgres://youruser:yourpass@localhost:5432/gymtrack
 JWT_SECRET=your_secret_key
-###Run the server:
+### Run the server:
 
 npm run start
-#Test it:
+### Test it:
 curl http://localhost:3000/workouts
+
 ---
 
-##🧪 3. Run Lint & Tests
+## 🧪 3. Run Lint & Tests
 
 npm run lint
 npm run test
+
 ---
 
-##🐳 4. Run Backend in Docker (Optional)
+## 🐳 4. Run Backend in Docker (Optional)
 
 docker build -t gymtrack-backend .
 docker run -p 3000:3000 --env-file .env gymtrack-backend
+
 ---
 
-##🖼️ 5. Frontend Setup (If applicable)
+## 🖼️ 5. Frontend Setup (If applicable)
 cd ../frontend
 npm install
 npm run dev
 Configure API URL in .env or config.js as needed.
+
 ---
 
-##✅ CI/CD
+## ✅ CI/CD
 GitHub Actions is used to:
-
 Lint code using ESLint
-
 Run unit tests with Jest
-
 Trigger pipeline on all pull requests to main or develop
-
 See .github/workflows/ci.yml for details.
+
 ---
 
-##📌 Project Status
+## 📌 Project Status
 This is a work-in-progress application for a DevOps course project.
 Major tasks ahead:
-
  Add user registration/login
-
  Connect frontend to backend API
-
  Deploy to cloud (Render or AWS)
-
  Add container orchestration and monitoring
+
 ---
 
-##📄 License
+## 📄 License
 MIT License. Feel free to fork, extend, and improve the project.
+
 ---
 
-###👨‍💻 Author
+## 👨‍💻 Author
 Created by Bosco Ishimwe as part of a DevOps learning project.
