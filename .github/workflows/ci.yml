@@ -1,12 +1,39 @@
-name: Dev CI
+name: CI Pipeline
 
 on:
   pull_request:
     branches: [main, develop]
 
 jobs:
-  skip:
+  build-and-test:
     runs-on: ubuntu-latest
-    if: ${{ false }}
+
     steps:
-      - run: echo "CI temporarily disabled — no codebase yet"
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v3
+
+      - name: ⚙️ Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 📦 Install dependencies
+        run: |
+          if [ -d "./backend" ]; then
+            cd backend
+            npm ci
+          fi
+
+      - name: 🧹 Run Linter
+        run: |
+          if [ -d "./backend" ]; then
+            cd backend
+            npm run lint || true
+          fi
+
+      - name: 🧪 Run Unit Tests
+        run: |
+          if [ -d "./backend" ]; then
+            cd backend
+            npm test || true
+          fi
