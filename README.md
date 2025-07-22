@@ -30,6 +30,33 @@ This project also serves as a DevOps learning sandbox, applying CI/CD pipelines,
 | Charts    | Chart.js or Recharts        |
 
 ---
+## 📁 Project Structure
+
+```
+befit-app/
+├── frontend/              # React frontend application
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── types/         # TypeScript types
+│   │   ├── data/          # Static data
+│   │   └── main.tsx       # Entry point
+│   ├── public/            # Static assets
+│   ├── index.html         # HTML template
+│   ├── package.json       # Frontend dependencies
+│   └── vite.config.ts     # Vite configuration
+├── backend/               # Node.js backend API
+│   ├── src/
+│   │   ├── routes/        # API routes
+│   │   ├── middleware/    # Express middleware
+│   │   ├── database/      # Database config & schema
+│   │   └── server.ts      # Main server file
+│   ├── .env.example       # Environment variables template
+│   └── package.json       # Backend dependencies
+├── supabase/              # Database migrations
+│   └── migrations/        # SQL migration files
+├── package.json           # Root package.json with scripts
+└── README.md              # This file
+```
 
 ## 🧑‍💻 Local Development Setup
 
