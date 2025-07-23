@@ -1,6 +1,6 @@
-# 🏋️‍♂️ GymTrack – Workout Progress Tracker
+# 🏋️‍♂️ BeFit – Workout Progress Tracker
 
-**GymTrack** is a lightweight web application that helps users log and track their gym workouts — including exercises, sets, reps, and weights — while visualizing progress over time. It’s designed as a practical, minimal fitness tracker that’s easy to use and extendable.
+**BeFit** is a lightweight web application that helps users log and track their gym workouts — including exercises, sets, reps, and weights — while visualizing progress over time. It’s designed as a practical, minimal fitness tracker that’s easy to use and extendable.
 
 This project also serves as a DevOps learning sandbox, applying CI/CD pipelines, containerization, and infrastructure-as-code principles.
 
