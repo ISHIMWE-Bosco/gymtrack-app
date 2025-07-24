@@ -104,10 +104,39 @@ npm run test
 
 ---
 
-## 🐳 4. Run Backend in Docker (Optional)
+## 🐳 Dockerization Process
 
-docker build -t gymtrack-backend .
-docker run -p 3000:3000 --env-file .env gymtrack-backend
+The **befit-app** was containerized using Docker to ensure consistent environment setup and simplify deployment.
+
+### 🔧 Steps Taken:
+
+1. **Created Dockerfiles** for both the frontend and backend:
+   - `frontend/Dockerfile` — built the React frontend using a multi-stage build with `node:alpine` and `nginx`.
+   - `backend/Dockerfile` — built the Node.js + Express backend with `node:alpine`.
+
+2. **Docker Images** were built locally:
+   ```bash
+   docker build -t befit-frontend ./frontend
+   docker build -t befit-backend ./backend
+Tagged the images for Azure Container Registry (ACR):
+
+
+docker tag befit-frontend ishimweregistry.azurecr.io/befit-frontend:latest
+docker tag befit-backend ishimweregistry.azurecr.io/befit-backend:latest
+Pushed images to ACR:
+
+
+docker push ishimweregistry.azurecr.io/befit-frontend:latest
+docker push ishimweregistry.azurecr.io/befit-backend:latest
+Configured Azure Web App for Containers to use the pushed image:
+
+# Selected Azure Container Registry as the image source.
+
+# Assigned AcrPull role to the Web App’s Managed Identity.
+
+# Restarted the Web App to allow Azure to pull the image successfully.
+
+# This setup enables smooth CI/CD-ready deployments and simplifies scaling in the cloud.
 
 ---
 
