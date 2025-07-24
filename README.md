@@ -130,13 +130,10 @@ docker push ishimweregistry.azurecr.io/befit-frontend:latest
 docker push ishimweregistry.azurecr.io/befit-backend:latest
 Configured Azure Web App for Containers to use the pushed image:
 
-# Selected Azure Container Registry as the image source.
-
-# Assigned AcrPull role to the Web App’s Managed Identity.
-
-# Restarted the Web App to allow Azure to pull the image successfully.
-
-# This setup enables smooth CI/CD-ready deployments and simplifies scaling in the cloud.
+Selected Azure Container Registry as the image source.
+Assigned AcrPull role to the Web App’s Managed Identity.
+Restarted the Web App to allow Azure to pull the image successfully.
+This setup enables smooth CI/CD-ready deployments and simplifies scaling in the cloud.
 
 ---
 
