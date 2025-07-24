@@ -1,13 +1,10 @@
-// types/express/index.d.ts
-import { Request } from 'express';
+import { Request } from 'express'; // ✅ Required to trigger augmentation
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        userId: string;
-        // Add other fields if needed
-      };
-    }
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: {
+      userId: string;
+      email: string;
+    };
   }
 }

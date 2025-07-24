@@ -28,7 +28,7 @@ export const authenticateToken = (
       email?: string;
     };
 
-    req.user = { userId: decoded.userId, email: decoded.email };
+    req.user =  {userId: string; email: string };
     next();
   } catch (err) {
     return res.status(403).json({ message: 'Invalid token' });

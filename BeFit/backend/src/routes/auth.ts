@@ -123,15 +123,22 @@ router.post('/login', [
 });
 
 // Get current user
-router.get('/me', authenticateToken, async (req: AuthenticatedRequest, res) => {
+router.get('/me', authenticateToken, async (req, res) => {
   try {
+    const userId = req.user?.userId;
+
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
     const result = await pool.query(
       'SELECT id, email, name, created_at FROM users WHERE id = $1',
-      [req.user?.userId] // now recognized
+      [userId]
     );
+
     res.json(result.rows[0]);
   } catch (err) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
