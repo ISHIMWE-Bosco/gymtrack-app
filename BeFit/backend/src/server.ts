@@ -72,9 +72,9 @@ async function startServer() {
     // Connect to database
     await connectDatabase();
     console.log('✅ Database connected successfully');
-
+const portNumber = typeof PORT === 'string' ? parseInt(PORT, 10) : PORT;
     // Start listening
-    app.listen(PORT, () => {
+    app.listen(portNumber,'0.0.0.0', () => {
       console.log(`🚀 BeFit API Server running on port ${PORT}`);
       console.log(`📱 Health check: http://localhost:${PORT}/health`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
