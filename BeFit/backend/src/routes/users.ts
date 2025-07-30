@@ -1,20 +1,21 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import pool from '../database/connection.js';
-import { authenticateToken } from '../middleware/auth.js';
+import { authenticateToken, AuthenticatedRequest } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // Get user profile
-router.get('/profile', authenticateToken, async (req, res) => {
+router.get('/profile', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const result = await pool.query(
       'SELECT id, email, name, created_at FROM users WHERE id = $1',
-      [req.user.userId]
+      [req.user!.userId]
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
+      res.status(404).json({ error: 'User not found' });
+      return;
     }
 
     const user = result.rows[0];
@@ -35,13 +36,15 @@ router.put('/profile', [
   authenticateToken,
   body('name').optional().trim().isLength({ min: 2 }),
   body('email').optional().isEmail().normalizeEmail()
-], async (req, res) => {
+], async (req: Request, res: Response): Promise<void> => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      res.status(400).json({ errors: errors.array() });
+      return;
     }
 
+    const authReq = req as AuthenticatedRequest;
     const { name, email } = req.body;
     const updates: string[] = [];
     const values: any[] = [];
@@ -60,10 +63,11 @@ router.put('/profile', [
     }
 
     if (updates.length === 0) {
-      return res.status(400).json({ error: 'No valid fields to update' });
+      res.status(400).json({ error: 'No valid fields to update' });
+      return;
     }
 
-    values.push(req.user.userId);
+    values.push(authReq.user!.userId);
 
     const result = await pool.query(
       `UPDATE users SET ${updates.join(', ')}, updated_at = CURRENT_TIMESTAMP 
@@ -73,7 +77,8 @@ router.put('/profile', [
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
+      res.status(404).json({ error: 'User not found' });
+      return;
     }
 
     const user = result.rows[0];
