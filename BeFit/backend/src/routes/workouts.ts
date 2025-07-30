@@ -1,12 +1,23 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import pool from '../database/connection.js';
-import { authenticateToken } from '../middleware/auth.js';
+import { authenticateToken, AuthenticatedRequest } from '../middleware/auth.js';
 
 const router = express.Router();
 
+interface ExerciseData {
+  exerciseId: string;
+  exerciseName: string;
+  notes?: string;
+  sets: Array<{
+    reps: number;
+    weight: number;
+    restTime?: number;
+  }>;
+}
+
 // Get all workouts for authenticated user
-router.get('/', authenticateToken, async (req, res) => {
+router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { page = 1, limit = 50 } = req.query;
     const offset = (Number(page) - 1) * Number(limit);
@@ -46,16 +57,16 @@ router.get('/', authenticateToken, async (req, res) => {
       GROUP BY w.id, w.date, w.duration, w.notes, w.total_volume
       ORDER BY w.date DESC
       LIMIT $2 OFFSET $3
-    `, [req.user.userId, limit, offset]);
+    `, [req.user!.userId, limit, offset]);
 
     const workouts = workoutsResult.rows.map(row => ({
       id: row.id,
-      userId: req.user.userId,
+      userId: req.user!.userId,
       date: row.date,
       duration: row.duration,
       notes: row.notes,
       totalVolume: parseFloat(row.total_volume),
-      exercises: row.exercises.filter(ex => ex.exerciseId !== null)
+      exercises: row.exercises.filter((ex: any) => ex.exerciseId !== null)
     }));
 
     res.json(workouts);
@@ -73,21 +84,28 @@ router.post('/', [
   body('exercises').isArray({ min: 1 }),
   body('exercises.*.exerciseId').isUUID(),
   body('exercises.*.sets').isArray({ min: 1 })
-], async (req, res) => {
+], async (req: Request, res: Response): Promise<void> => {
   const client = await pool.connect();
   
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      res.status(400).json({ errors: errors.array() });
+      return;
     }
 
+    const authReq = req as AuthenticatedRequest;
     await client.query('BEGIN');
 
-    const { date, duration, notes, exercises } = req.body;
+    const { date, duration, notes, exercises }: {
+      date: string;
+      duration: number;
+      notes?: string;
+      exercises: ExerciseData[];
+    } = req.body;
 
     // Calculate total volume
-    const totalVolume = exercises.reduce((total: number, exercise: any) => {
+    const totalVolume = exercises.reduce((total: number, exercise: ExerciseData) => {
       return total + exercise.sets.reduce((exerciseTotal: number, set: any) => {
         return exerciseTotal + (set.reps * set.weight);
       }, 0);
@@ -96,7 +114,7 @@ router.post('/', [
     // Create workout
     const workoutResult = await client.query(
       'INSERT INTO workouts (user_id, date, duration, notes, total_volume) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-      [req.user.userId, date, duration, notes, totalVolume]
+      [authReq.user!.userId, date, duration, notes, totalVolume]
     );
 
     const workoutId = workoutResult.rows[0].id;
@@ -135,17 +153,18 @@ router.post('/', [
 });
 
 // Delete workout
-router.delete('/:id', authenticateToken, async (req, res) => {
+router.delete('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
 
     const result = await pool.query(
       'DELETE FROM workouts WHERE id = $1 AND user_id = $2 RETURNING id',
-      [id, req.user.userId]
+      [id, req.user!.userId]
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Workout not found' });
+      res.status(404).json({ error: 'Workout not found' });
+      return;
     }
 
     res.json({ message: 'Workout deleted successfully' });
